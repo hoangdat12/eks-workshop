@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-app-deployment
+spec:
+  selector:
+    matchLabels:
+      app: gateway-app
+  template:
+    metadata:
+      labels:
+        app: gateway-app
+    spec:
+      containers:
+        - name: gateway-app-container
+          image: hoangdat12/api-gateway
+          resources:
+            # limits:
+            #   memory: "128Mi"
+            #   cpu: "500m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: USER_APP
+              value: user-app-service
+            - name: AUTH_APP
+              value: auth-app-service

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-app-deployment
+spec:
+  selector:
+    matchLabels:
+      app: auth-app-label
+  template:
+    metadata:
+      labels:
+        app: auth-app-label
+    spec:
+      containers:
+        - name: auth-app-container
+          image: hoangdat12/auth-api
+          resources:
+            # limits:
+            #   memory: '128Mi'
+            #   cpu: '500m'
+          ports:
+            - containerPort: 5002

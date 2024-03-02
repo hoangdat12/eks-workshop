@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv # Specify the name of the Persistent Volume as "mypv"
+spec:
+  capacity:
+    storage: <Size> # Specify the storage capacity for the Persistent Volume, replace <Size> with a specific value (e.g., "1Gi").
+  volumeMode: Filesystem # Set the volume mode to "Filesystem" to use the PV for file system storage.
+  accessModes:
+    - ReadWriteOnce # Specify the access mode as "ReadWriteOnce," allowing it to be read and written by a single node.
+  persistentVolumeReclaimPolicy: Recycle # Set the reclaim policy to "Recycle," meaning data will be deleted upon release.
+  storageClassName: slow # Specify the StorageClass name to be applied to the PV as "slow."
+  mountOptions:
+    - hard # Set mount option "hard" for NFS.
+    - nfsvers=4.1 # Set mount option "nfsvers=4.1" for NFS version.
+  nfs:
+    path: /tmp # Specify the NFS mount point path as "/tmp."
+    server: 172.17.0.2 # Specify the IP address of the NFS server as "172.17.0.2."
