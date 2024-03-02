@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-app-deployment # Name of the Deployment resource
+spec:
+  selector:
+    matchLabels:
+      app: user-app-label # Selector to match labels for identifying managed pods
+  template:
+    metadata:
+      labels:
+        app: user-app-label # Labels for the pods created by the template
+    spec:
+      containers:
+        - name: user-app-container # Name of the container inside the pod
+          image: hoangdat12/user-api
+          resources:
+            # limits:
+            # memory: "128Mi"
+            # cpu: "500m"
+          ports:
+            - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-app-service
+spec:
+  selector:
+    app: user-app-label # Selector to match labels for selecting pods to expose
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001

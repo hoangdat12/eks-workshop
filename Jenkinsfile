@@ -2,6 +2,10 @@ pipeline {
     agent any
 
     environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = "ap-southeast-1"
+
         USER_APP_NAME = "user-api"
         AUTH_APP_NAME = "auth-api"
         GATEWAY_APP_NAME = "api-gateway"
@@ -47,6 +51,24 @@ pipeline {
                             
                         sh "docker build -t ${GATEWAY_IMAGE}:${IMAGE_TAG} -f api-gateway/Dockerfile api-gateway"
                         sh "docker push ${GATEWAY_IMAGE}:${IMAGE_TAG}"
+                    }
+                }
+            }
+        }
+
+         stage('Deploying Application To EKS') {
+            steps{
+                script{
+                    // Config EKS
+                    sh 'aws eks update-kubeconfig --name eks-cluster'
+                    dir('api-gateway') {
+                        sh 'kubectl apply -f gateway-kub.yaml'
+                    }
+                    dir('users-api') {
+                        sh 'kubectl apply -f user-kub.yaml'
+                    }
+                    dir('auth-api') {
+                        sh 'kubectl apply -f auth-kub.yaml'
                     }
                 }
             }

@@ -4,6 +4,10 @@ module "eks_vpc" {
   name = "eks-vpc"
   cidr = var.vpc_cidr
 
+  enable_nat_gateway = true
+  single_nat_gateway = false
+  one_nat_gateway_per_az = true
+
   azs             = ["ap-southeast-1a", "ap-southeast-1b"]
   private_subnets = var.private_subnets_cidr
   public_subnets  = var.public_subnets_cidr
@@ -109,5 +113,32 @@ module "ec2_instance" {
   tags = {
     Terraform   = "true"
     Environment = "dev"
+  }
+}
+
+module "eks" {
+  source = "terraform-aws-modules/eks/aws"
+
+  cluster_name    = "eks-cluster"
+  cluster_version = "1.29"
+
+  cluster_endpoint_public_access = true
+
+  vpc_id     = module.eks_vpc.vpc_id
+  subnet_ids = module.eks_vpc.private_subnets
+
+  eks_managed_node_groups = {
+    nodes = {
+      min_size     = 1
+      max_size     = 3
+      desired_size = 2
+
+      instance_type = ["t2.small"]
+    }
+  }
+
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
   }
 }

@@ -26,5 +26,9 @@ sudo yum -y install terraform
 
 # Docker
 sudo yum install docker -y
+sudo systemctl start docker
+sudo groupadd docker
 sudo usermod -a -G docker $USER
 sudo chmod 666 /var/run/docker.sock
+sudo service docker stop
+sudo service docker start
