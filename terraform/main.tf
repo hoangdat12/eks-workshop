@@ -5,7 +5,7 @@ module "eks_vpc" {
   cidr = var.vpc_cidr
 
   enable_nat_gateway = true
-  single_nat_gateway = false
+  single_nat_gateway = true
   one_nat_gateway_per_az = true
 
   azs             = ["ap-southeast-1a", "ap-southeast-1b"]
@@ -118,7 +118,8 @@ module "ec2_instance" {
 }
 
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 20.0"
 
   cluster_name    = "eks-cluster"
   cluster_version = "1.29"
