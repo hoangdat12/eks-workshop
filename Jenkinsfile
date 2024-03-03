@@ -22,7 +22,7 @@ pipeline {
         stage("Checkout SCM") {
             steps {
                 script {
-                    checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/hoangdat12/eks-workshop.git']])
+                    checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-crd', url: 'https://github.com/hoangdat12/eks-workshop.git']])
                 }
             }
         }
@@ -60,15 +60,25 @@ pipeline {
             steps{
                 script{
                     // Config EKS
-                    sh 'aws eks update-kubeconfig --name eks-cluster'
-                    dir('api-gateway') {
-                        sh 'kubectl apply -f gateway-kub.yaml'
-                    }
-                    dir('users-api') {
-                        sh 'kubectl apply -f user-kub.yaml'
-                    }
-                    dir('auth-api') {
-                        sh 'kubectl apply -f auth-kub.yaml'
+                  
+                    // dir('api-gateway') {
+                    //     sh 'kubectl apply -f gateway-kub.yaml'
+                    // }
+                    // dir('users-api') {
+                    //     sh 'kubectl apply -f user-kub.yaml'
+                    // }
+                    // dir('auth-api') {
+                    //     sh 'kubectl apply -f auth-kub.yaml'
+                    // }
+
+                    // If have error, we need update aws version and run command /usr/local/bin/aws eks update-kubeconfig --name eks-cluster
+
+                    dir("kubernetes") {
+                        sh 'aws eks update-kubeconfig --name eks-cluster'
+                        // sh "kubectl apply -f api-gateway/Deployment.yaml -f auth-api/Deployment.yaml -f user-api/Deployment.yaml"
+                        // sh "kubectl apply -f api-gateway/Service.yaml -f auth-api/Service.yaml -f user-api/Service.yaml"
+                        sh "kubectl apply -f api-gateway/Deployment.yaml"
+                        sh "kubectl apply -f api-gateway/Service.yaml"
                     }
                 }
             }

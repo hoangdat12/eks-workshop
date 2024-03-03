@@ -19,10 +19,11 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-# Terraform
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-sudo yum -y install terraform
+
+# # Terraform
+# sudo yum install -y yum-utils
+# sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+# sudo yum -y install terraform
 
 # Docker
 sudo yum install docker -y
@@ -30,5 +31,5 @@ sudo systemctl start docker
 sudo groupadd docker
 sudo usermod -a -G docker $USER
 sudo chmod 666 /var/run/docker.sock
-sudo service docker stop
-sudo service docker start
+sudo systemctl stop docker 
+sudo systemctl start docker

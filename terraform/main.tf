@@ -102,6 +102,7 @@ module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
 
   name = "jenkins-instance"
+  ami           = data.aws_ami.amazon_linux.id
 
   instance_type          = var.instance_type
   key_name               = "jenkins-key"
@@ -133,7 +134,7 @@ module "eks" {
       max_size     = 3
       desired_size = 2
 
-      instance_type = ["t2.small"]
+      instance_types = ["t2.small"]
     }
   }
 
