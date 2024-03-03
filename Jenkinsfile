@@ -61,8 +61,7 @@ pipeline {
                 script{
                     // Config EKS
                     dir("kubernetes") {
-                      
-                        sh "kubectl apply -f api-gateway/Deployment.yaml"  sh "kubectl apply -f api-gateway/Deployment.yaml -f auth-api/Deployment.yaml -f user-api/Deployment.yaml"
+                        sh "kubectl apply -f api-gateway/Deployment.yaml -f auth-api/Deployment.yaml -f user-api/Deployment.yaml"
                         sh "kubectl apply -f api-gateway/Service.yaml -f auth-api/Service.yaml -f user-api/Service.yaml"
                         sh "kubectl apply -f api-gateway/Service.yaml"
                     }
