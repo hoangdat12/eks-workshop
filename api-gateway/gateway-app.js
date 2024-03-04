@@ -44,7 +44,7 @@ app.use(
 
 app.use(
   '/auth',
-  gatewayMiddleware({ target: `http://${process.env.AUTH_APP}:5001` })
+  gatewayMiddleware({ target: `http://${process.env.AUTH_APP}:5002` })
 );
 
 app.listen(80);
